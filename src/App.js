@@ -1,24 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import SideBar from './components/SideBar'
+import Table from './components/Tables'
+import CreateCamp from './components/CreateCamp'
 import './App.css';
 
 function App() {
+    const [selectionBar,setSelectionBar] = useState('campaign')
+
+    function getDisplayView(step) {
+        switch (step) {
+          case 'campaign':
+            return (<Table></Table>)
+          case 'createCampaign':
+            return (<CreateCamp></CreateCamp>);
+        }}
+    const handleOnClickMenuButton = type => {
+        setSelectionBar(type);
+          };
+        
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+<div className="principal-loyout">
+        <SideBar
+        handleOnClickMenuButton = {handleOnClickMenuButton}
+        selectionBar ={selectionBar}
+        ></SideBar>
+        <div className="container">
+            {getDisplayView(selectionBar)}
+        </div>
     </div>
   );
 }

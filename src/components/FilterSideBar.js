@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from "react";
+import GenericButton from "./GenericButton";
 import InpuApp from './InputApp'
 import Title from "./Title";
 
@@ -13,12 +14,12 @@ const FilterSideBar = ({filterlist,handleChangeFilter, filterViewSelect,handleCh
         if (form[filter.code] ==1){
             className = ' li-filter-add '
             value = 0
-            classNameIcon = 'fas fa-times-circle minus-icon'
+            classNameIcon = 'fas fa-check-circle add-icon'
         }
         if (form[filter.code] ==0){
             className = ' li-filter '
             value = 1
-            classNameIcon = 'fas fa-check-circle add-icon'
+
         }
         if (filter.code == filterViewSelect){
             className += 'li-filter-selected'
@@ -29,7 +30,7 @@ const FilterSideBar = ({filterlist,handleChangeFilter, filterViewSelect,handleCh
         return (<Fragment>
                 <div className='container-row-filter'>
                     <li className={className} key={filter.code} onClick={()=>handleChangeFilter(filter.code)}>{filter.name}</li>
-                    <i class={classNameIcon} onClick={()=>{handleChangeFilterAdd(filter.code,value)}}></i>
+                    <i class={classNameIcon}></i>
                 </div>
         </Fragment>)
     }
@@ -48,6 +49,10 @@ const FilterSideBar = ({filterlist,handleChangeFilter, filterViewSelect,handleCh
         <Title text={selectName}></Title>
         
         {listParam.map(renderInputs)}
+        <div>
+            <GenericButton text='Agregar' onCl = {handleChangeFilterAdd}></GenericButton>
+            <GenericButton text='Eliminar'onCl = {handleChangeFilterAdd}></GenericButton>
+        </div>
     </div>
     </Fragment>)
 };

@@ -149,10 +149,6 @@ i{
     box-sizing: border-box;
     width: 80%;
     height: 700px;
-    background-color:white;
-    border-radius: 3px;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-    margin:25px 0;
     padding-top: 100px;
   }
   .box-form{
@@ -268,6 +264,7 @@ i{
     cursor: pointer;
     box-shadow: 0 0 5px rgb(0,0,0, 0.15);
     border: 2px solid #dadce0;
+    user-select: none; 
   }
  .container-row-filter{
    display: flex;
@@ -281,17 +278,9 @@ i{
    margin:5px;
    cursor: pointer;
  }
- .minus-icon{
-  align-self: center;
-  justify-self: center;
-  font-size: 15px;
-  color: red;
-  margin:5px;
-  cursor: pointer;
- }
- .container-row-filter i:hover{
-  color: greenyellow;
- }
+
+
+
  .li-filter-add{
   background-color:green;
   color:white;
@@ -323,11 +312,41 @@ i{
   }
 
   .container-param-filter{
+    border: 1px solid #dadce0;
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
     text-align: center;
-    margin-left: 20px
+    margin-left: 20px;
+    padding: 15px;
+    box-sizing: border-box;
   }
 
+/*botones genericos*/
+.generic-btn {
+  width: 100px;
+  height: 30px;
+  border: none;
+  font-size: 15px;
+  color:#5F6368;
+  border: 1px solid white;
+  margin-right: 25px;
+  padding: 7px 15px 7px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.generic-btn:hover {
+  border: 1px solid rgba(0, 0, 0, 0.226);
+  color:black;
+  box-shadow: 0 0 5px rgb(0,0,0, 0.15);
+}
+
+.generic-btn:active{
+    box-shadow: 0 1px 0 #5F6368;
+    top: 1px;
+    border:1px solid blue ;
+  
+}

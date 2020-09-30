@@ -6,12 +6,29 @@ import ButtonsProgressBar from "./ButtonsProgressbar";
 import FilterSideBar from './FilterSideBar'
 
 const CreateCamp = ()=>{
+    const Hourlist = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0]
+    const DaysWeek = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo']
+    const programationType = {1:[{key:'DateToSend',name:'Dia del envio',type:'date'},{key:'HourToSend',name:'hora de envio',type:'select',options:Hourlist}],
+    2:{'Diaria':[{key:'HourToSend',name:'Horario de envio',type:'select',options:Hourlist}],
+        'Semanal':[{key:'HourToSend',name:'Horario de envio',type:'select',options:Hourlist},{key:'DayWeekToSend',name:'Dia de la semana',type:'select',options:DaysWeek}],
+        'Mensual':[{key:'HourToSend',name:'Horario de envio',type:'select',options:Hourlist},{key:'DayMonthToSend',name:'Dia del mes',type:'text'}],
+        'Campaña':[]}}
+
+    const filterTriggers = [{code:'ChargeDate',name:'Fecha carga',
+    listParameter: [{key:'Lapse',name:'Lapso',type:'number'},{key:'TypeProgrammSend', name:'Tipo de lapso', type:'select', options:['Diaria','Semanal','Mensual','Campaña']}]},
+    {code:'DateAppDownload',name:'Fecha Descarga App',
+        listParameter:[{key:'Lapse',name:'Lapso',type:'number'}]},
+    {code:'CheckPurchaseItem',name:'Compra del articulo',
+        listParameter:[{key:'Lapse',name:'lapso',type:'number'},{key:'PurchaseItem',name:'Articulo',type:'text'}]},
+    {code:'ConsumePeriodAverage',name:'Consumo promedio',
+        listParameter:[{key:'Lapse',name:'lapso',type:'number'}]}]
+
     const listInput = [
         {key:'Name',name:'Nombre',type:'input',},
-        {key:'TypeNotification',name:'Tipo de notificacion',type:'select', options:['','Publica','Privada']},
-        {key:'TypeSend',name:'Tipo de envio',type:'select',options:['','Unico envio','Automatizada','']},
-        {key:'Outstanding',name:'Destacado',type:'select',options:['','Si','No']},
-        {key:'IncludePanel',name:'Incluir en el panel',type:'select',options:['','Si','No']},
+        {key:'TypeNotification',name:'Tipo de notificacion',type:'select', options:['Publica','Privada']},
+        {key:'TypeSend',name:'Tipo de envio',type:'select',options:['Unico envio','Automatizada']},
+        {key:'Outstanding',name:'Destacado',type:'select',options:['Si','No']},
+        {key:'IncludePanel',name:'Incluir en el panel',type:'select',options:['Si','No']},
         {key:'Subject',name:'Asunto',type:'input'},
         {key:'TemplateCode',name:'Codigo del template',type:'input'}
     ]
@@ -73,12 +90,57 @@ const CreateCamp = ()=>{
                 
             });
         })
+        filterTriggers.map((filter)=>{
+            filter.listParameter.map((param)=>{
+                if (param.type=='date'){
+                    var hoy = new Date();
+                    var dd = hoy.getDate();
+                    var mm = hoy.getMonth()+1;
+                    var yyyy = hoy.getFullYear();
+                    hoy = '1990'+'-'+'09'+'-'+'15';
+                    contentForm[param.key]= hoy
+                }else{
+                    contentForm[param.key]='';
+                }
+                
+            });
+        })
+            programationType[1].map((param)=>{
+                if (param.type=='date'){
+                    var hoy = new Date();
+                    var dd = hoy.getDate();
+                    var mm = hoy.getMonth()+1;
+                    var yyyy = hoy.getFullYear();
+                    hoy = '1990'+'-'+'09'+'-'+'15';
+                    contentForm[param.key]= hoy
+                }else{
+                    contentForm[param.key]='';
+                }
+                
+            })
+            let listProgramationType = Object.entries(programationType[2])
+            listProgramationType.map((filter)=>{
+                filter[1].map((param)=>{
+                    if (param.type=='date'){
+                        var hoy = new Date();
+                        var dd = hoy.getDate();
+                        var mm = hoy.getMonth()+1;
+                        var yyyy = hoy.getFullYear();
+                        hoy = '1990'+'-'+'09'+'-'+'15';
+                        contentForm[param.key]= hoy
+                    }else{
+                        contentForm[param.key]='';
+                    }
+                    
+                });
+            })
+
         return contentForm
     }
     const contentFormFinish = createContentForm()
     const [ form, setForm ] = useState(contentFormFinish)
     const [stepSelect, setSteptSelect] = useState(1)
-    const [filterViewSelect, setfilterViewSelect] = useState('')
+    const [filterViewSelect, setfilterViewSelect] = useState('ChargeDate')
 
     const handleChange = e => {
         setForm({
@@ -86,10 +148,17 @@ const CreateCamp = ()=>{
             [e.target.name]: e.target.value
         })
     }
-    const handleChangeFilterAdd = (name , value) =>{
+    const handleChangeFilterAdd = (e) =>{
+        let result 
+        if (e.target.value=='Agregar'){
+            result = 1
+        }
+        if (e.target.value=='Eliminar'){
+            result = 0
+        } 
         setForm({
             ...form,
-            [name]: value
+            [filterViewSelect]: result
         })
     }
     const handleChangeStep = e =>{
@@ -115,19 +184,54 @@ const CreateCamp = ()=>{
         }
 
         if (stepSelect==2){
-            return(<div className='card'>
-            <div className='box-form-filter'>
-                <FilterSideBar  
-                    filterlist = {filterlist}
-                    handleChangeFilter = {handleChangeFilter}
-                    filterViewSelect = {filterViewSelect} 
-                    handleChange={handleChange}
-                    handleChangeFilterAdd = {handleChangeFilterAdd} 
-                    form={form}>
-                </FilterSideBar>
-            </div>
-        </div>)
+            if (form.TypeSend == 'Unico envio'){
+                return(<div className='card'>
+                <div className='box-form-filter'>
+                    <FilterSideBar  
+                        filterlist = {filterlist}
+                        handleChangeFilter = {handleChangeFilter}
+                        filterViewSelect = {filterViewSelect} 
+                        handleChange={handleChange}
+                        handleChangeFilterAdd = {handleChangeFilterAdd} 
+                        form={form}>
+                    </FilterSideBar>
+                </div>
+            </div>)
+            }
+            if (form.TypeSend == 'Automatizada'){
+                return(<div className='card'>
+                <div className='box-form-filter'>
+                    <FilterSideBar  
+                        filterlist = {filterTriggers}
+                        handleChangeFilter = {handleChangeFilter}
+                        filterViewSelect = {filterViewSelect} 
+                        handleChange={handleChange}
+                        handleChangeFilterAdd = {handleChangeFilterAdd} 
+                        form={form}>
+                    </FilterSideBar>
+                </div>
+            </div>)
+            }
         }
+        if (stepSelect==3){
+            let list = []
+            let text = form.TypeSend + ' ' +(form.TypeProgrammSend)
+            if (form.TypeSend=='Unico envio'){
+                list=programationType[1]
+            }
+            if (form.TypeSend=='Automatizada'){
+                list=programationType[2][form.TypeProgrammSend]
+                console.log(list)
+            }
+            return(
+            <div className='card'>
+                <div className='box-form-filter'>
+                <div className='container-param-filter'>
+                    <Title text={text}></Title>
+                    {list.map(renderInputs)}
+                </div>
+            </div>
+        </div>)}
         else{
             return(<h1>el paso seleccionado es {stepSelect}</h1>)
         }

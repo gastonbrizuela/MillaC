@@ -8,8 +8,6 @@ const SideBar = ({handleOnClickMenuButton,selectionBar})=>{
     const renderButtons =(button,index) =>{
         let classn = ''
         if (selectionBar==button.key){
-            console.log(button.key)
-            console.log('entra')
             classn = 'li-side-bar-selected'
         }
         return(

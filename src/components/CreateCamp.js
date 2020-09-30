@@ -26,31 +26,31 @@ const CreateCamp = ()=>{
         listParameter:[ {key:'MinAmount',name:'Monto Minimo',type:'number'},
                         {key:'MaxAmount', name:'Monto Maximo', type:'number'}]},
     {code:'ConsumePeriod',name:'Consumo en periodo',
-        listParameter:[{key:'MinAmountConsumePeriod',name:'Monto Minimo',type:'number'},{key:'MaxAmountConsumePeriod',name:'',type:''},{key:'StartDateConsumePeriod',name:'',type:''},{key:'EndDateConsumePeriod',name:'',type:''}]},
+        listParameter:[{key:'MinAmountConsumePeriod',name:'Monto Minimo',type:'number'},{key:'MaxAmountConsumePeriod',name:'Monto maximo',type:'number'},{key:'StartDateConsumePeriod',name:'Fecha inicio',type:'date'},{key:'EndDateConsumePeriod',name:'Fecha fin',type:'date'}]},
     {code:'AmountVsActual',name:'Monto Vs campaña actual',
-        listParameter:[{key:'CampaignAmountVsActual',name:'',type:''},{key:'AmountVsActualMore',name:'',type:''}]},
+        listParameter:[{key:'CampaignAmountVsActual',name:'Campaña',type:'text'},{key:'AmountVsActualMore',name:'mayor/menor',type:'select',options:['Mas en Campaña actual','Menos en campaña Actual']}]},
     {code:'StatusCurrentCampaign',name:'Estado en campaña Actual',
-        listParameter:[{key:'ActiveStatusCurrentCampaign',name:'',type:''}]},
+        listParameter:[{key:'ActiveStatusCurrentCampaign',name:'Estado en campaña actual',type:'salect',options:['Activo', 'Inactivo']}]},
     {code:'StatusInCampaign',name:'Estado en campaña',
-        listParameter:[{key:'ActiveStatusInCampaign',name:'',type:''},{key:'CampaignStatusIn',name:'',type:''}]},
+        listParameter:[{key:'ActiveStatusInCampaign',name:'Actividad en campaña',type:'select',options:['Activo','Inactivo']},{key:'CampaignStatusIn',name:'Campaña',type:'text'}]},
     {code:'OfficeCkeck',name:'Oficina',
-        listParameter:[{key:'Office',name:'',type:''}]},
+        listParameter:[{key:'Office',name:'Sucursal',type:'text'}]},
     {code:'ProvinceLocality',name:'Provincia/Localidad',
-        listParameter:[{key:'Province',name:'',type:''},{key:'Locality',name:'',type:''}]},
+        listParameter:[{key:'Province',name:'Provincia',type:'text'},{key:'Locality',name:'Localidad',type:'text'}]},
     {code:'LastUseApp',name:'Ultimo uso de la app',
-        listParameter:[{key:'StartLastUseApp',name:'',type:''},{key:'EndLastUseApp',name:'',type:''}]},
+        listParameter:[{key:'StartLastUseApp',name:'Fecha Inicio',type:'date'},{key:'EndLastUseApp',name:'Fecha Fin',type:'date'}]},
     {code:'CheckNoPurchaseInDays',name:'No realizo compra en dias',
-        listParameter:[{key:'NoPurchaseInDays',name:'',type:''}]}, 
+        listParameter:[{key:'NoPurchaseInDays',name:'Cantidad de dias',type:'number'}]}, 
     {code:'CheckNoPurchaseInCampaign',name:'No realizo compra en campaña',
-        listParameter:[{key:'NoPurchaseInCampaign',name:'',type:''}]},
+        listParameter:[{key:'NoPurchaseInCampaign',name:'Campaña',type:'text'}]},
     {code:'ConsumePeriodAverage',name:'Consumo promedio en period',
-        listParameter:[{key:'MinAmountConsumePeriodAverage',name:'',type:''},{key:'MaxAmountConsumePeriodAverage',name:'',type:''},{key:'StartDateConsumePeriodAverage',name:'',type:''},{key:'EndDateConsumePeriodAverage',name:'',type:''}]},
+        listParameter:[{key:'MinAmountConsumePeriodAverage',name:'Monto minimo',type:'number'},{key:'MaxAmountConsumePeriodAverage',name:'Monto maximo',type:'text'},{key:'StartDateConsumePeriodAverage',name:'Fecha inicio',type:'date'},{key:'EndDateConsumePeriodAverage',name:'Fecha fin',type:'date'}]},
     {code:'CheckPurchaseItem',name:'Compra de Articulo',
-        listParameter:[{key:'PurchaseItem',name:'',type:''},{key:'CheckIfPurchase',name:'',type:''},{key:'StartDatePurchaseItem',name:'',type:''},{key:'EndDatePurchaseItem',name:'',type:''}]},
+        listParameter:[{key:'PurchaseItem',name:'Articulo',type:'text'},{key:'CheckIfPurchase',name:'Compro/No Compro',type:'select',options:['Compro', 'No compro']},{key:'StartDatePurchaseItem',name:'Fecha de inicio',type:'date'},{key:'EndDatePurchaseItem',name:'Fecha fin',type:'date'}]},
     {code:'CheckInvalid',name:'Email/telefono invalido',
-        listParameter:[{key:'InvalidEmail',name:'',type:''},{key:'InvalidPhone',name:'',type:''}]},
+        listParameter:[{key:'InvalidEmail',name:'Email',type:'select',options:['Si','No']},{key:'InvalidPhone',name:'Telefono',type:'select', options:['Si','NO']}]},
     {code:'CheckPoints',name:'Puntos', 
-        listParameter:[{key:'MinAmountPoint',name:'',type:''},{key:'MaxAmountPoint',name:'',type:''}]}]
+        listParameter:[{key:'MinAmountPoint',name:'Minimo',type:'number'},{key:'MaxAmountPoint',name:'Maximo',type:'nomber'}]}]
     
         const createContentForm= ()=>{
         var contentForm = new Object();
@@ -58,9 +58,19 @@ const CreateCamp = ()=>{
             contentForm[intp.key]='';
         })
         filterlist.map((filter)=>{
-            contentForm[filter.code]='';
+            contentForm[filter.code]=0;
             filter.listParameter.map((param)=>{
-                contentForm[param.key]='';
+                if (param.type=='date'){
+                    var hoy = new Date();
+                    var dd = hoy.getDate();
+                    var mm = hoy.getMonth()+1;
+                    var yyyy = hoy.getFullYear();
+                    hoy = '1990'+'-'+'09'+'-'+'15';
+                    contentForm[param.key]= hoy
+                }else{
+                    contentForm[param.key]='';
+                }
+                
             });
         })
         return contentForm
@@ -76,11 +86,17 @@ const CreateCamp = ()=>{
             [e.target.name]: e.target.value
         })
     }
+    const handleChangeFilterAdd = (name , value) =>{
+        setForm({
+            ...form,
+            [name]: value
+        })
+    }
     const handleChangeStep = e =>{
-        if (e.target.value =='menos'){
+        if (e =='menos'){
             setSteptSelect(stepSelect-1)
         }
-        if (e.target.value =='mas'){
+        if (e =='mas'){
             setSteptSelect(stepSelect+1)
         }
     }
@@ -101,7 +117,14 @@ const CreateCamp = ()=>{
         if (stepSelect==2){
             return(<div className='card'>
             <div className='box-form-filter'>
-                <FilterSideBar filterlist = {filterlist} handleChangeFilter = {handleChangeFilter} filterViewSelect = {filterViewSelect} handleChange={handleChange} form={form}></FilterSideBar>
+                <FilterSideBar  
+                    filterlist = {filterlist}
+                    handleChangeFilter = {handleChangeFilter}
+                    filterViewSelect = {filterViewSelect} 
+                    handleChange={handleChange}
+                    handleChangeFilterAdd = {handleChangeFilterAdd} 
+                    form={form}>
+                </FilterSideBar>
             </div>
         </div>)
         }

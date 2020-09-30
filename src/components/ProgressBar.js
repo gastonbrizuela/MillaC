@@ -2,10 +2,10 @@ import React, { Fragment, useState } from "react";
 
 const ProgressBar =({stepSelect})=>{
     const listBarSteps = [
-        {step:1,name:'Definicion de campaña'},
-        {step:2,name:'Filtro'},
-        {step:3,name:'Programacion'},
-        {step:4,name:'Resumen'},
+        {step:1,name:'1-Definicion de campaña'},
+        {step:2,name:'2-Filtro'},
+        {step:3,name:'3-Programacion'},
+        {step:4,name:'4-Resumen'},
         
     ]
 

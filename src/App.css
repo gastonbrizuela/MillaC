@@ -1,3 +1,4 @@
+
 body{
   font-family: 'roboto';
   font-size: 13px;
@@ -119,11 +120,12 @@ i{
 }
 .content-table tbody tr td i:hover{
   font-size:20px;
-  color: greenyellow;
+  color:  palevioletred;
 }
 
 
 /*Input */
+
 .input-materialx {
   box-sizing: border-box;
    border: 1px solid #dadce0;
@@ -196,7 +198,7 @@ i{
 
   .title-main{
     color: rgb(55,78,107) ;
-    margin-bottom:10px;
+    margin-bottom:15px;
   }
 
 
@@ -240,35 +242,70 @@ i{
     width: 100%;
   }
 
-  .buttons-progress-bar-container button{
-    width: 100px;
-    height: 50px;
-  }
+
   .prueba{
     text-align: center;
     background-color: forestgreen;
+  }
+  .button-step{
+    font-size: 40px;
+    cursor: pointer;
+  }
+  .button-step:hover{
+    color: palevioletred
   }
 
   /*FILTROS */
   /*SIDE BAR FILTROS*/
   .li-filter{
     background-color:#dadce0;
-    margin: 2px;
+    margin-top: 3px;
+    margin-bottom: 3px;
     width: 200px;
     padding: 5px;
     text-align: center;
     transition: 0.5s;
     cursor: pointer;
+    box-shadow: 0 0 5px rgb(0,0,0, 0.15);
+    border: 2px solid #dadce0;
   }
-
+ .container-row-filter{
+   display: flex;
+   flex-direction: row;
+ }
+ .add-icon{
+   align-self: center;
+   justify-self: center;
+   font-size: 15px;
+   color: green;
+   margin:5px;
+   cursor: pointer;
+ }
+ .minus-icon{
+  align-self: center;
+  justify-self: center;
+  font-size: 15px;
+  color: red;
+  margin:5px;
+  cursor: pointer;
+ }
+ .container-row-filter i:hover{
+  color: greenyellow;
+ }
+ .li-filter-add{
+  background-color:green;
+  color:white;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  width: 200px;
+  padding: 5px;
+  text-align: center;
+  transition: 0.5s;
+  cursor: pointer;
+  border: 2px solid green
+}
   .li-filter-selected{
-    background-color: greenyellow;
-    margin: 2px;
-    width: 200px;
-    padding: 5px;
-    text-align: center;
-    transition: 0.5s;
-    cursor: pointer;
+    border: 2px solid rgb(55,78,107)
   }
 
 
@@ -288,8 +325,9 @@ i{
   .container-param-filter{
     display: flex;
     flex-direction: column;
-    padding:50px;
     width: 100%;
     height: 100%;
+    text-align: center;
+    margin-left: 20px
   }
 

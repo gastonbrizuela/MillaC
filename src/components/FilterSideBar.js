@@ -47,7 +47,6 @@ const FilterSideBar = ({filterlist,handleChangeFilter, filterViewSelect,handleCh
     </ul>
     <div className='container-param-filter'>
         <Title text={selectName}></Title>
-        
         {listParam.map(renderInputs)}
         <div>
             <GenericButton text='Agregar' onCl = {handleChangeFilterAdd}></GenericButton>

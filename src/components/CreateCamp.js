@@ -4,6 +4,7 @@ import Title from "./Title"
 import ProgressBar from "./ProgressBar"
 import ButtonsProgressBar from "./ButtonsProgressbar";
 import FilterSideBar from './FilterSideBar'
+import Resume from "./Resume";
 
 const CreateCamp = ()=>{
     const Hourlist = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0]
@@ -72,7 +73,10 @@ const CreateCamp = ()=>{
         const createContentForm= ()=>{
         var contentForm = new Object();
         listInput.map((intp)=>{
-            contentForm[intp.key]='';
+            contentForm[intp.key]=''
+            if (intp.type== 'select'){
+                contentForm[intp.key]= intp.options[0]
+            }
         })
         filterlist.map((filter)=>{
             contentForm[filter.code]=0;
@@ -84,9 +88,13 @@ const CreateCamp = ()=>{
                     var yyyy = hoy.getFullYear();
                     hoy = '1990'+'-'+'09'+'-'+'15';
                     contentForm[param.key]= hoy
-                }else{
+                } else if (param.type== 'select'){
+                    contentForm[param.key]= param.options[0]
+                }
+                else{
                     contentForm[param.key]='';
                 }
+                
                 
             });
         })
@@ -99,7 +107,10 @@ const CreateCamp = ()=>{
                     var yyyy = hoy.getFullYear();
                     hoy = '1990'+'-'+'09'+'-'+'15';
                     contentForm[param.key]= hoy
-                }else{
+                }else if (param.type== 'select'){
+                    contentForm[param.key]= param.options[0]
+                }
+                else{
                     contentForm[param.key]='';
                 }
                 
@@ -113,7 +124,10 @@ const CreateCamp = ()=>{
                     var yyyy = hoy.getFullYear();
                     hoy = '1990'+'-'+'09'+'-'+'15';
                     contentForm[param.key]= hoy
-                }else{
+                }else if (param.type== 'select'){
+                    contentForm[param.key]= param.options[0]
+                }
+                else{
                     contentForm[param.key]='';
                 }
                 
@@ -128,12 +142,16 @@ const CreateCamp = ()=>{
                         var yyyy = hoy.getFullYear();
                         hoy = '1990'+'-'+'09'+'-'+'15';
                         contentForm[param.key]= hoy
-                    }else{
+                    }else if (param.type== 'select'){
+                        contentForm[param.key]= param.options[0]
+                    }
+                    else{
                         contentForm[param.key]='';
                     }
                     
                 });
             })
+            
 
         return contentForm
     }
@@ -178,7 +196,9 @@ const CreateCamp = ()=>{
         if (stepSelect == 1){
            return( <div className='card'>
             <div className='box-form'>
+                <div className='container-param-filter'>
                 {listInput.map(renderInputs)}
+                </div>
             </div>
         </div>)
         }
@@ -221,7 +241,6 @@ const CreateCamp = ()=>{
             }
             if (form.TypeSend=='Automatizada'){
                 list=programationType[2][form.TypeProgrammSend]
-                console.log(list)
             }
             return(
             <div className='card'>
@@ -232,8 +251,20 @@ const CreateCamp = ()=>{
                 </div>
             </div>
         </div>)}
-        else{
-            return(<h1>el paso seleccionado es {stepSelect}</h1>)
+        if (stepSelect == 4){
+            let listProgramation;
+            let listFilter;
+            if (form.TypeSend=='Unico envio'){
+            listProgramation =  programationType[1]
+            listFilter = filterlist
+            }
+            if (form.TypeSend=='Automatizada'){
+            listProgramation = programationType[2][form.TypeProgrammSend]
+            listFilter = filterTriggers
+            }
+            return( <div className='card'>
+                                <Resume listInput={listInput} form={form} programation = {listProgramation} listFilter={listFilter}></Resume>
+                    </div>)
         }
     }
 
@@ -247,10 +278,11 @@ const CreateCamp = ()=>{
 
     return (
         <Fragment>
-            
-            <Title text = 'Nueva Campaña'></Title>
+            <div className='head-progress'>
             <ProgressBar stepSelect= {stepSelect}></ProgressBar>
             <ButtonsProgressBar handleChangeStep={handleChangeStep}></ButtonsProgressBar>
+            <hr></hr>
+            </div>
             {renderContend()}
         </Fragment>
     );

@@ -1,18 +1,49 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Input from "./InputApp";
 import Title from "./Title"
 import ProgressBar from "./ProgressBar"
 import ButtonsProgressBar from "./ButtonsProgressbar";
 import FilterSideBar from './FilterSideBar'
 import Resume from "./Resume";
+import CheckButton from "./CheckButton";
+import axios from 'axios'
 
-const CreateCamp = ()=>{
+
+
+const CreateCamp = ({handleAddCamp,handleOnClickMenuButton})=>{
+    const optionsValueOpenOrange = {
+        TypeProgrammSend :{'Diaria':0,'Semanal':1,'Mensual':2,'Campaña':3},
+        DayWeekToSend:{'Lunes':0,'Martes':1,'Miercoles':2,'Jueves':3,'Viernes':4,'Sabado':5,'Domingo':6},
+        TypeNotification:{'Publica':0,'Privada':1},
+        TypeSend :{'Unico envio':0,'Automatizada':1},
+        outstanding:{'Si':1,'No':0},
+        PanelInclude:{'Si':1,'No':0},
+        AmountVsActualMore:{'Si':1,'No':0},
+        ActiveStatusCurrentCampaign:{'Activo':1, 'Inactivo':0},
+        ActiveStatusInCampaign:{'Activo':1, 'Inactivo':0},
+        CheckIfPurchase:{'Compro':1, 'No compro':0},
+        InvalidEmail:{'Si':1,'No':0},
+        InvalidPhone:{'Si':1,'No':0}
+    }
+
+
+/*        TypeProgrammSend:{}
+        TypeNotification
+        TypeSend
+        Outstanding
+        PanelInclude
+        AmountVsActualMore
+        ActiveStatusCurrentCampaign
+        ActiveStatusInCampaign
+        CheckIfPurchase
+        InvalidEmail
+        InvalidPhone */
     const Hourlist = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0]
     const DaysWeek = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo']
     const programationType = {1:[{key:'DateToSend',name:'Dia del envio',type:'date'},{key:'HourToSend',name:'hora de envio',type:'select',options:Hourlist}],
     2:{'Diaria':[{key:'HourToSend',name:'Horario de envio',type:'select',options:Hourlist}],
         'Semanal':[{key:'HourToSend',name:'Horario de envio',type:'select',options:Hourlist},{key:'DayWeekToSend',name:'Dia de la semana',type:'select',options:DaysWeek}],
-        'Mensual':[{key:'HourToSend',name:'Horario de envio',type:'select',options:Hourlist},{key:'DayMonthToSend',name:'Dia del mes',type:'text'}],
+        'Mensual':[{key:'HourToSend',name:'Horario de envio',type:'select',options:Hourlist},{key:'DayMonthToSend',name:'Dia del mes',type:'number'}],
         'Campaña':[]}}
 
     const filterTriggers = [{code:'ChargeDate',name:'Fecha carga',
@@ -28,10 +59,10 @@ const CreateCamp = ()=>{
         {key:'Name',name:'Nombre',type:'input',},
         {key:'TypeNotification',name:'Tipo de notificacion',type:'select', options:['Publica','Privada']},
         {key:'TypeSend',name:'Tipo de envio',type:'select',options:['Unico envio','Automatizada']},
-        {key:'Outstanding',name:'Destacado',type:'select',options:['Si','No']},
-        {key:'IncludePanel',name:'Incluir en el panel',type:'select',options:['Si','No']},
+        {key:'outstanding',name:'Destacado',type:'select',options:['Si','No']},
+        {key:'PanelInclude',name:'Incluir en el panel',type:'select',options:['Si','No']},
         {key:'Subject',name:'Asunto',type:'input'},
-        {key:'TemplateCode',name:'Codigo del template',type:'input'}
+        {key:'Content',name:'Codigo del template',type:'input'}
     ]
     const filterlist =[ 
     {code:'ChargeDate', name:'Fecha Carga',
@@ -62,13 +93,13 @@ const CreateCamp = ()=>{
     {code:'CheckNoPurchaseInCampaign',name:'No realizo compra en campaña',
         listParameter:[{key:'NoPurchaseInCampaign',name:'Campaña',type:'text'}]},
     {code:'ConsumePeriodAverage',name:'Consumo promedio en period',
-        listParameter:[{key:'MinAmountConsumePeriodAverage',name:'Monto minimo',type:'number'},{key:'MaxAmountConsumePeriodAverage',name:'Monto maximo',type:'text'},{key:'StartDateConsumePeriodAverage',name:'Fecha inicio',type:'date'},{key:'EndDateConsumePeriodAverage',name:'Fecha fin',type:'date'}]},
+        listParameter:[{key:'MinAmountConsumePeriodAverage',name:'Monto minimo',type:'number'},{key:'MaxAmountConsumePeriodAverage',name:'Monto maximo',type:'number'},{key:'StartDateConsumePeriodAverage',name:'Fecha inicio',type:'date'},{key:'EndDateConsumePeriodAverage',name:'Fecha fin',type:'date'}]},
     {code:'CheckPurchaseItem',name:'Compra de Articulo',
         listParameter:[{key:'PurchaseItem',name:'Articulo',type:'text'},{key:'CheckIfPurchase',name:'Compro/No Compro',type:'select',options:['Compro', 'No compro']},{key:'StartDatePurchaseItem',name:'Fecha de inicio',type:'date'},{key:'EndDatePurchaseItem',name:'Fecha fin',type:'date'}]},
     {code:'CheckInvalid',name:'Email/telefono invalido',
-        listParameter:[{key:'InvalidEmail',name:'Email',type:'select',options:['Si','No']},{key:'InvalidPhone',name:'Telefono',type:'select', options:['Si','NO']}]},
+        listParameter:[{key:'InvalidEmail',name:'Email',type:'select',options:['Si','No']},{key:'InvalidPhone',name:'Telefono',type:'select', options:['Si','No']}]},
     {code:'CheckPoints',name:'Puntos', 
-        listParameter:[{key:'MinAmountPoint',name:'Minimo',type:'number'},{key:'MaxAmountPoint',name:'Maximo',type:'nomber'}]}]
+        listParameter:[{key:'MinAmountPoint',name:'Minimo',type:'number'},{key:'MaxAmountPoint',name:'Maximo',type:'number'}]}]
     
         const createContentForm= ()=>{
         var contentForm = new Object();
@@ -90,8 +121,9 @@ const CreateCamp = ()=>{
                     contentForm[param.key]= hoy
                 } else if (param.type== 'select'){
                     contentForm[param.key]= param.options[0]
-                }
-                else{
+                }else if (param.type== 'number'){
+                    contentForm[param.key]= 0
+                }else{
                     contentForm[param.key]='';
                 }
                 
@@ -109,8 +141,9 @@ const CreateCamp = ()=>{
                     contentForm[param.key]= hoy
                 }else if (param.type== 'select'){
                     contentForm[param.key]= param.options[0]
-                }
-                else{
+                }else if (param.type== 'number'){
+                    contentForm[param.key]= 0
+                }else{
                     contentForm[param.key]='';
                 }
                 
@@ -126,8 +159,9 @@ const CreateCamp = ()=>{
                     contentForm[param.key]= hoy
                 }else if (param.type== 'select'){
                     contentForm[param.key]= param.options[0]
-                }
-                else{
+                }else if (param.type== 'number'){
+                    contentForm[param.key]= 0
+                }else{
                     contentForm[param.key]='';
                 }
                 
@@ -144,8 +178,9 @@ const CreateCamp = ()=>{
                         contentForm[param.key]= hoy
                     }else if (param.type== 'select'){
                         contentForm[param.key]= param.options[0]
-                    }
-                    else{
+                    }else if (param.type== 'number'){
+                        contentForm[param.key]= 0
+                    }else{
                         contentForm[param.key]='';
                     }
                     
@@ -159,7 +194,11 @@ const CreateCamp = ()=>{
     const [ form, setForm ] = useState(contentFormFinish)
     const [stepSelect, setSteptSelect] = useState(1)
     const [filterViewSelect, setfilterViewSelect] = useState('ChargeDate')
+    const [checkSaveCamp, setCheckSaveCamp] = useState(0)
 
+    const handleChangeSaveCamp = ()=>{
+        setCheckSaveCamp(1)
+    }
     const handleChange = e => {
         setForm({
             ...form,
@@ -181,9 +220,34 @@ const CreateCamp = ()=>{
     }
     const handleChangeStep = e =>{
         if (e =='menos'){
+            if (stepSelect==1){
+                return
+            }
             setSteptSelect(stepSelect-1)
         }
         if (e =='mas'){
+            if (stepSelect==4){
+                setSteptSelect(stepSelect+1)
+                setTimeout(() => {
+                    handleChangeSaveCamp()
+                    handleAddCamp(form)
+                    let returnfor = form
+                    let listOtionsValueOpenOrange = Object.entries(optionsValueOpenOrange)
+                    listOtionsValueOpenOrange.map((element)=>{
+                        returnfor[element[0]] = element[1][returnfor[element[0]]]
+                    })
+                    axios.post('http://192.168.0.7:5000/api', returnfor)
+                    .then(response => {
+                        console.log(response)
+                    }).catch(e => {
+                        console.log(e);
+                    });
+                }, 3000);
+                setTimeout(() => {
+                    handleOnClickMenuButton('campaign')
+                }, 5000);
+                return
+            }
             setSteptSelect(stepSelect+1)
         }
     }
@@ -263,8 +327,14 @@ const CreateCamp = ()=>{
             listFilter = filterTriggers
             }
             return( <div className='card'>
+                                
                                 <Resume listInput={listInput} form={form} programation = {listProgramation} listFilter={listFilter}></Resume>
                     </div>)
+        }
+        if(stepSelect==5){
+            return(<div className='content-check'>
+            <CheckButton checkSaveCamp={checkSaveCamp} text='La Campaña se guardo correctamente'></CheckButton>
+            </div>)
         }
     }
 
@@ -280,10 +350,11 @@ const CreateCamp = ()=>{
         <Fragment>
             <div className='head-progress'>
             <ProgressBar stepSelect= {stepSelect}></ProgressBar>
-            <ButtonsProgressBar handleChangeStep={handleChangeStep}></ButtonsProgressBar>
+            <ButtonsProgressBar handleChangeStep={handleChangeStep} step = {stepSelect}></ButtonsProgressBar>
             <hr></hr>
             </div>
             {renderContend()}
+            
         </Fragment>
     );
 };

@@ -2,8 +2,9 @@ import React, { Fragment, useState } from "react";
 import logo from '../logo.png';
 const SideBar = ({handleOnClickMenuButton,selectionBar})=>{
     const ButtonsAction = [
-        {name:'Campaña',classN:'fas fa-search' ,key:'campaign'},
-        {name:'Crear Campaña',classN:'fas fa-search', key:'createCampaign'}
+        {name:'Campaña',classN:'fas fa-folder-open' ,key:'campaign'},
+        {name:'Crear Campaña',classN:'fas fa-folder-plus', key:'createCampaign'},
+        {name:'Agregar Template',classN:'fas fa-file-code', key:'createTample'}
     ]
     const renderButtons =(button,index) =>{
         let classn = ''

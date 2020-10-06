@@ -1,9 +1,13 @@
 import React, { Fragment, useState } from "react";
-
-const ButtonsProgressBar = ({handleChangeStep})=>{
+import GenericButton from './GenericButton'
+const ButtonsProgressBar = ({handleChangeStep,step})=>{
+    let textBtn = "Siguiente"
+    if (step==4){
+        textBtn = "Finalizar"
+    }
     return (<div className ='buttons-progress-bar-container' >
-            <i className ='fas fa-arrow-circle-left button-step' value = 'menos' key = '1' onClick={()=>handleChangeStep('menos')}/>
-            <i className = 'fas fa-arrow-circle-right button-step' value = 'mas' key = '2' onClick = {()=>handleChangeStep('mas')}/>
+            <GenericButton text='Anterior' onCl = {()=>handleChangeStep('menos')}></GenericButton>
+            <GenericButton text={textBtn} onCl = {()=>handleChangeStep('mas')}></GenericButton>
             </div>
     )
 }

@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import Title from "./Title";
 
-const Tables = ()=>{
+const Tables = ({listCamp})=>{
     const listCampaignInitial = [
         {codigo:'01', nombre:'CampañaUno',filtro:'Ver+',estado:'Activa',envios:'Ver+',reportes:'ver+',eliminar:'Ver+'},
         {codigo:'02', nombre:'CampañaDos',filtro:'Ver+',estado:'Activa',envios:'Ver+',reportes:'ver+',eliminar:'Ver+'},
@@ -12,15 +12,16 @@ const Tables = ()=>{
  
     ]
 
-    const [listCampa, setTableConetentOneSend] = useState(listCampaignInitial)
+    const [listCampa, setTableConetentOneSend] = useState([])
 
     const renderCampaign =(camp,index) =>{
+        console.log()
         return(
             <tr key={index}>
-                <td>{camp.codigo}</td>
-                <td>{camp.nombre}</td>
+                <td>{camp.internalId}</td>
+                <td>{camp.Name}</td>
                 <td>Ver+</td>
-                <td>{camp.estado}</td>
+                <td></td>
                 <td><i className='fas fa-share'></i></td>
                 <td>ver+</td>
                 <td>ver+</td>
@@ -42,7 +43,7 @@ const Tables = ()=>{
                     </tr>
                 </thead>
                 <tbody>
-                {listCampa.map(renderCampaign)}
+                {listCamp.map(renderCampaign)}
                 </tbody>
             </table>
             </Fragment>

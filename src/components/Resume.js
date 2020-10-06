@@ -31,7 +31,9 @@ const Resume = ({listInput,form, programation,listFilter})=>{
                 </div>
                 <div className='container-param-resume grid-filter'>
                     <Title text='Filtros'></Title>
+                    <div className = 'contain-param-resume'>
                     {listFilter.map(renderFilter)}
+                    </div>
                 </div>
             </div>
                 </Fragment>

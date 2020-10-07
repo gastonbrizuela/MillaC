@@ -1,18 +1,24 @@
 import React, { Fragment, useState } from "react";
+import { Link } from "react-router-dom";
 import logo from '../logo.png';
-const SideBar = ({handleOnClickMenuButton,selectionBar})=>{
+const SideBar = ()=>{
+
     const ButtonsAction = [
-        {name:'Campaña',classN:'fas fa-folder-open' ,key:'campaign'},
-        {name:'Crear Campaña',classN:'fas fa-folder-plus', key:'createCampaign'},
-        {name:'Agregar Template',classN:'fas fa-file-code', key:'createTample'}
+        {name:'Campaña',classN:'fas fa-folder-open' ,key:'campaign', link:'/main/campaign'},
+        {name:'Crear Campaña',classN:'fas fa-folder-plus', key:'createCampaign',link:'/main/create'},
+        {name:'Agregar Template',classN:'fas fa-file-code', key:'createTample',link:'/main/createtample'}
     ]
     const renderButtons =(button,index) =>{
         let classn = ''
-        if (selectionBar==button.key){
+        if (false){
             classn = 'li-side-bar-selected'
         }
         return(
-            <li className={classn} key= {index} onClick={() => handleOnClickMenuButton(button.key)}><a><i className={button.classN}></i>{button.name}</a></li>
+            <li className={classn} key= {index}>
+                <Link to= {button.link} style={{ textDecoration: 'none' }}>
+                <i className={button.classN}></i>{button.name}
+                </Link>
+            </li>
         )}
 
 

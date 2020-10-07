@@ -1,56 +1,44 @@
 import React, { useState,useEffect } from 'react';
-import SideBar from './components/SideBar'
-import Table from './components/Tables'
-import CreateCamp from './components/CreateCamp'
+import Login from './pages/Login'
+import Main from './pages/Main'
 import './App.css';
-import axios from 'axios'
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import Tables from './components/Tables';
+import CreateCamp from './components/CreateCamp'
+import Resume from './components/Resume';
 
 function App() {
-    const [selectionBar,setSelectionBar] = useState('campaign')
-    const [listCamp, setListCamp] = useState([])
-
-    useEffect(()=>{
-      axios.get('http://192.168.0.7:5000/api')
-      .then(res=>{
-        setListCamp(res.data)
-      })
-      .catch(err=>{
-          console.log(err)
-      })
-    })
-
-    const handleAddCamp = (camp)=>
-      {
-        setListCamp([
-            ...listCamp,
-            camp
-        ])
-    }
-    
-    function getDisplayView(step) {
-        switch (step) {
-          case 'campaign':
-            return (<Table listCamp={listCamp}></Table>)
-          case 'createCampaign':
-            return (<CreateCamp handleAddCamp={handleAddCamp} handleOnClickMenuButton ={handleOnClickMenuButton}></CreateCamp>);
-        }}
-    const handleOnClickMenuButton = type => {
-            setSelectionBar(type);
-          };
-        
-
-
+  /*Swich se detiene en el primero que coincide, sin el hace el render sobre cualquier que coincida
+  sin el exact busca una minima coincidencia*/
   return (
-<div className="principal-loyout">
-        <SideBar
-        handleOnClickMenuButton = {handleOnClickMenuButton}
-        selectionBar ={selectionBar}
-        ></SideBar>
-        <div className="container">
-            {getDisplayView(selectionBar)}
-        </div>
-    </div>
-  );
+    
+    <Router>
+      <Switch>
+      <Route exact path='/login'>
+        <Login></Login>
+      </Route>
+      <div className="principal-loyout">
+      <Main></Main>
+      <Route path='/main/campaign'>
+      <div className="container">
+        <Tables listCamp={[]}></Tables>
+      </div>
+      </Route>
+      <Route path='/main/create'>
+      <div className="container">
+        <CreateCamp></CreateCamp>
+      </div>
+      </Route>
+      <Route path='/main/createtample'>
+      <div className="container">
+        <h1>create tample</h1>
+      </div>
+      </Route>
+      </div>
+      </Switch>
+    </Router>
+    
+     );
 }
 
 export default App;

@@ -1,18 +1,19 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState,useEffect } from "react";
 import Title from "./Title";
+import axios from "axios";
 
-const Tables = ({listCamp})=>{
-    const listCampaignInitial = [
-        {codigo:'01', nombre:'CampañaUno',filtro:'Ver+',estado:'Activa',envios:'Ver+',reportes:'ver+',eliminar:'Ver+'},
-        {codigo:'02', nombre:'CampañaDos',filtro:'Ver+',estado:'Activa',envios:'Ver+',reportes:'ver+',eliminar:'Ver+'},
-        {codigo:'03', nombre:'CampañaTres',filtro:'Ver+',estado:'Activa',envios:'Ver+',reportes:'ver+',eliminar:'Ver+'},
-        {codigo:'04', nombre:'Campaña Cuatro',filtro:'Ver+',estado:'Activa',envios:'Ver+',reportes:'ver+',eliminar:'Ver+'},
-        {codigo:'04', nombre:'Campaña Cinco',filtro:'Ver+',estado:'Activa',envios:'Ver+',reportes:'ver+',eliminar:'Ver+'},
-        {codigo:'04', nombre:'Campaña seis',filtro:'Ver+',estado:'Activa',envios:'Ver+',reportes:'ver+',eliminar:'Ver+'}
- 
-    ]
+const Tables = ()=>{
+    const [listCamp, setListCamp] = useState([])
 
-    const [listCampa, setTableConetentOneSend] = useState([])
+    useEffect(()=>{
+      axios.get('http://192.168.0.7:5000/api')
+      .then(res=>{
+        setListCamp(res.data)
+      })
+      .catch(err=>{
+          console.log(err)
+      })
+    })
 
     const renderCampaign =(camp,index) =>{
         console.log()

@@ -7,10 +7,11 @@ import FilterSideBar from './FilterSideBar'
 import Resume from "./Resume";
 import CheckButton from "./CheckButton";
 import axios from 'axios'
+import { Redirect } from "react-router-dom";
 
 
 
-const CreateCamp = ({handleAddCamp,handleOnClickMenuButton})=>{
+const CreateCamp = ()=>{
     const optionsValueOpenOrange = {
         TypeProgrammSend :{'Diaria':0,'Semanal':1,'Mensual':2,'Campaña':3},
         DayWeekToSend:{'Lunes':0,'Martes':1,'Miercoles':2,'Jueves':3,'Viernes':4,'Sabado':5,'Domingo':6},
@@ -229,8 +230,7 @@ const CreateCamp = ({handleAddCamp,handleOnClickMenuButton})=>{
             if (stepSelect==4){
                 setSteptSelect(stepSelect+1)
                 setTimeout(() => {
-                    handleChangeSaveCamp()
-                    handleAddCamp(form)
+                    
                     let returnfor = form
                     let listOtionsValueOpenOrange = Object.entries(optionsValueOpenOrange)
                     listOtionsValueOpenOrange.map((element)=>{
@@ -239,14 +239,15 @@ const CreateCamp = ({handleAddCamp,handleOnClickMenuButton})=>{
                     axios.post('http://192.168.0.7:5000/api', returnfor)
                     .then(response => {
                         console.log(response)
+                        handleChangeSaveCamp()
+                        setTimeout(() => {
+                        setSteptSelect(6)
+                        }, 3000);
+                        
                     }).catch(e => {
                         console.log(e);
                     });
                 }, 3000);
-                setTimeout(() => {
-                    handleOnClickMenuButton('campaign')
-                }, 5000);
-                return
             }
             setSteptSelect(stepSelect+1)
         }
@@ -336,6 +337,9 @@ const CreateCamp = ({handleAddCamp,handleOnClickMenuButton})=>{
             <CheckButton checkSaveCamp={checkSaveCamp} text='La Campaña se guardo correctamente'></CheckButton>
             </div>)
         }
+        if(stepSelect==6){
+            return(<Redirect to='/main/campaign'></Redirect>)
+        }
     }
 
     const renderInputs = (inputdata)=>{
@@ -354,7 +358,6 @@ const CreateCamp = ({handleAddCamp,handleOnClickMenuButton})=>{
             <hr></hr>
             </div>
             {renderContend()}
-            
         </Fragment>
     );
 };
